@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 // 初始化方法，Dir是可以通讯的文件路径
 - (instancetype)initWithPort:(unsigned)serverPort withDir:(NSString*)aDirectory notifyObject:(id)sender;
+// 停止FTP服务
+- (void)stopFtpServer;
 
 @end
 

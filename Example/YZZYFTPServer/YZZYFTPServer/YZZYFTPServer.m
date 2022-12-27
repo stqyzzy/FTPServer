@@ -89,9 +89,18 @@ BOOL g_XMFTP_LogEnabled = NO;
     return self;
 }
 
+// 停止FTP服务
+- (void)stopFtpServer {
+    if (self.listenSocket) {
+        [self.listenSocket disconnect];
+    }
+    
+    [self.connectedSocketsMutableArray removeAllObjects];
+    [self.connectionsMutableArray removeAllObjects];
+}
 
 #pragma mark -
-#pragma mark - <#custom#> Delegate
+#pragma mark - ASYNCSOCKET Delegate
 
 #pragma mark -
 #pragma mark - private methods
