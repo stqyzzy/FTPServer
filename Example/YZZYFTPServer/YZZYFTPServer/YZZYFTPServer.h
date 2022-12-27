@@ -11,12 +11,23 @@
 =====================================================*/
 
 #import <Foundation/Foundation.h>
+#import "AsyncSocket.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface YZZYFTPServer : NSObject
+@property (nonatomic, strong) id notificationObject; // 通知的对象
+@property (nonatomic, copy) NSDictionary *commandsDic; // 命令字典
+@property (nonatomic, copy) NSMutableArray *connectionsMutableArray; // 连接数组
+@property (nonatomic, assign) NSInteger portNumber; // 端口号
+@property (nonatomic, strong) AsyncSocket *listenSocket;
+@property (nonatomic, copy) NSMutableArray *connectedSocketsMutableArray; // 连接的Sockets数组
+@property (nonatomic, copy) NSString *baseDirString; // 基础文件路径
+@property (nonatomic, assign) BOOL changeRoot; // Change root to virtual root ( basedir )
+@property (nonatomic, assign) NSInteger clientEncoding; // 客户端编码
+
 // 初始化方法，Dir是可以通讯的文件路径
-- (id)initWithPort:(unsigned)serverPort withDir:(NSString*)aDirectory notifyObject:(id)sender;
+- (instancetype)initWithPort:(unsigned)serverPort withDir:(NSString*)aDirectory notifyObject:(id)sender;
 
 @end
 

@@ -7,6 +7,9 @@
 //
 
 #import "YZZYFTPServer.h"
+#import "YZZYFTPDefines.h"
+
+BOOL g_XMFTP_LogEnabled = NO;
 
 @interface YZZYFTPServer()
 
@@ -41,8 +44,49 @@
 #pragma mark -
 #pragma mark - public methods
 // 初始化方法，Dir是可以通讯的文件路径
-- (id)initWithPort:(unsigned)serverPort withDir:(NSString*)aDirectory notifyObject:(id)sender {
-    
+- (instancetype)initWithPort:(unsigned)serverPort withDir:(NSString*)aDirectory notifyObject:(id)sender {
+    if (self = [super init]) {
+        self.notificationObject = sender; // 设置通知对象
+        // 加载命令
+        NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"xmftp_commands" ofType:@"plist"];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
+            // 文件不存在，则产生断言
+            NSAssert(0, @"xmftp_commands.plist missing");
+        }
+        self.commandsDic = [[NSDictionary alloc] initWithContentsOfFile:plistPath];
+        // 清楚连接列表
+        self.connectionsMutableArray = [[NSMutableArray alloc] init];
+        // 创建一个socket端口
+        self.portNumber = serverPort;
+        // 创建Socket连接
+        AsyncSocket *myListenSocket = [[AsyncSocket alloc] initWithDelegate:self];
+        self.listenSocket = myListenSocket;
+        
+        // 日志开关
+        if (g_XMFTP_LogEnabled) {
+            XMFTPLog(@"Listening on %d", self.portNumber);
+        }
+        NSError *error = nil;
+        // Socket开启监听
+        [self.listenSocket acceptOnPort:serverPort error:&error];
+        self.connectedSocketsMutableArray = [[NSMutableArray alloc] initWithCapacity:1];
+        
+        // 设置路径
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSString *expandedPath = [aDirectory stringByStandardizingPath]; // 拼接标准路径
+        
+        
+        if ([fileManager changeCurrentDirectoryPath:expandedPath]) {
+            // 尝试改成标准化路径
+            self.baseDirString = [[fileManager currentDirectoryPath] copy];
+        } else {
+            self.baseDirString = aDirectory;
+        }
+        self.changeRoot = NO;
+        // 默认编码是 UTF8
+        self.clientEncoding = NSUTF8StringEncoding;
+    }
+    return self;
 }
 
 

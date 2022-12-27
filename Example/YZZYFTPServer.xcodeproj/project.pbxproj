@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		538F4784295ADBA7005B67C3 /* YZZYFTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 538F4783295ADBA7005B67C3 /* YZZYFTPServer.m */; };
+		538F4786295AE1A6005B67C3 /* xmftp_commands.plist in Resources */ = {isa = PBXBuildFile; fileRef = 538F4785295AE1A6005B67C3 /* xmftp_commands.plist */; };
+		538F478A295AE3CC005B67C3 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 538F4789295AE3CC005B67C3 /* AsyncSocket.m */; };
 		5435D7967F9707ACEB4B4922 /* Pods_YZZYFTPServer_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65854263CBC5637D43AD4900 /* Pods_YZZYFTPServer_Tests.framework */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -43,6 +45,10 @@
 		4F292ADAE99BD73A6D01DD9F /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		538F4782295ADBA7005B67C3 /* YZZYFTPServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = YZZYFTPServer.h; path = YZZYFTPServer/YZZYFTPServer.h; sourceTree = "<group>"; };
 		538F4783295ADBA7005B67C3 /* YZZYFTPServer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = YZZYFTPServer.m; path = YZZYFTPServer/YZZYFTPServer.m; sourceTree = "<group>"; };
+		538F4785295AE1A6005B67C3 /* xmftp_commands.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = xmftp_commands.plist; sourceTree = "<group>"; };
+		538F4788295AE3CC005B67C3 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
+		538F4789295AE3CC005B67C3 /* AsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncSocket.m; sourceTree = "<group>"; };
+		538F478B295AE4A7005B67C3 /* YZZYFTPDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YZZYFTPDefines.h; sourceTree = "<group>"; };
 		5B800970040F8B8A25F35A3A /* Pods-YZZYFTPServer_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YZZYFTPServer_Tests.debug.xcconfig"; path = "Target Support Files/Pods-YZZYFTPServer_Tests/Pods-YZZYFTPServer_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* YZZYFTPServer_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YZZYFTPServer_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -103,8 +109,18 @@
 			children = (
 				538F4782295ADBA7005B67C3 /* YZZYFTPServer.h */,
 				538F4783295ADBA7005B67C3 /* YZZYFTPServer.m */,
+				538F478B295AE4A7005B67C3 /* YZZYFTPDefines.h */,
 			);
 			name = YZZYFTPServer;
+			sourceTree = "<group>";
+		};
+		538F4787295AE3CC005B67C3 /* CocoaAsyncSocket */ = {
+			isa = PBXGroup;
+			children = (
+				538F4788295AE3CC005B67C3 /* AsyncSocket.h */,
+				538F4789295AE3CC005B67C3 /* AsyncSocket.m */,
+			);
+			path = CocoaAsyncSocket;
 			sourceTree = "<group>";
 		};
 		6003F581195388D10070C39A = {
@@ -144,12 +160,14 @@
 		6003F593195388D20070C39A /* Example for YZZYFTPServer */ = {
 			isa = PBXGroup;
 			children = (
+				538F4787295AE3CC005B67C3 /* CocoaAsyncSocket */,
 				538F477E295ADA5E005B67C3 /* YZZYFTPServer */,
 				6003F59C195388D20070C39A /* YZZYAppDelegate.h */,
 				6003F59D195388D20070C39A /* YZZYAppDelegate.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
 				6003F5A5195388D20070C39A /* YZZYViewController.h */,
 				6003F5A6195388D20070C39A /* YZZYViewController.m */,
+				538F4785295AE1A6005B67C3 /* xmftp_commands.plist */,
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
@@ -294,6 +312,7 @@
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
+				538F4786295AE1A6005B67C3 /* xmftp_commands.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,6 +397,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F59E195388D20070C39A /* YZZYAppDelegate.m in Sources */,
+				538F478A295AE3CC005B67C3 /* AsyncSocket.m in Sources */,
 				538F4784295ADBA7005B67C3 /* YZZYFTPServer.m in Sources */,
 				6003F5A7195388D20070C39A /* YZZYViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
