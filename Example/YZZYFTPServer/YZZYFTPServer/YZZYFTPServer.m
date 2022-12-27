@@ -101,7 +101,9 @@ BOOL g_XMFTP_LogEnabled = NO;
 
 #pragma mark -
 #pragma mark - ASYNCSOCKET Delegate
-
+- (void)onSocket:(AsyncSocket *)sock didAcceptNewSocket:(AsyncSocket *)newSocket {
+    
+}
 #pragma mark -
 #pragma mark - private methods
 

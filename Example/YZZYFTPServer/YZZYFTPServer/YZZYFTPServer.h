@@ -15,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YZZYFTPServer : NSObject
+@interface YZZYFTPServer : NSObject <AsyncSocketDelegate>
 @property (nonatomic, strong) id notificationObject; // 通知的对象
 @property (nonatomic, copy) NSDictionary *commandsDic; // 命令字典
 @property (nonatomic, copy) NSMutableArray *connectionsMutableArray; // 连接数组
