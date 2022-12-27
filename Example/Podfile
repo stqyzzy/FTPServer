@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '10.0'
+
+target 'YZZYFTPServer_Example' do
+  pod 'YZZYFTPServer', :path => '../'
+
+  target 'YZZYFTPServer_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
