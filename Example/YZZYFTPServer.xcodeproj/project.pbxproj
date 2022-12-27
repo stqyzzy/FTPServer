@@ -278,6 +278,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = stqyzzy;
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = 9K375X4QTV;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -528,11 +531,12 @@
 			baseConfigurationReference = 814DEBFF2AE8ECBEA4E3AA58 /* Pods-YZZYFTPServer_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 9K375X4QTV;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YZZYFTPServer/YZZYFTPServer-Prefix.pch";
 				INFOPLIST_FILE = "YZZYFTPServer/YZZYFTPServer-Info.plist";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = yzzy.com.devcxm.XMFTPServerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;
@@ -544,11 +548,12 @@
 			baseConfigurationReference = 10CD8E4436ADDA1194006CE3 /* Pods-YZZYFTPServer_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 9K375X4QTV;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YZZYFTPServer/YZZYFTPServer-Prefix.pch";
 				INFOPLIST_FILE = "YZZYFTPServer/YZZYFTPServer-Info.plist";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = yzzy.com.devcxm.XMFTPServerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;
