@@ -64,7 +64,7 @@ BOOL g_XMFTP_LogEnabled = NO;
         
         // 日志开关
         if (g_XMFTP_LogEnabled) {
-            XMFTPLog(@"Listening on %d", self.portNumber);
+            XMFTPLog(@"Listening on %zd", self.portNumber);
         }
         NSError *error = nil;
         // Socket开启监听
