@@ -34,3 +34,12 @@ Carthage/Build
 # `pod install` in .travis.yml
 #
 # Pods/
+Example/Podfile.lock
+Example/Pods/Manifest.lock
+Example/Pods/Local Podspecs/YZZYFTPServer.podspec.json
+Example/Pods/Pods.xcodeproj/project.pbxproj
+Example/Pods/Target Support Files/Pods-YZZYFTPServer_Example/Pods-YZZYFTPServer_Example.debug.xcconfig
+Example/Pods/Target Support Files/Pods-YZZYFTPServer_Example/Pods-YZZYFTPServer_Example.release.xcconfig
+Example/Pods/Target Support Files/Pods-YZZYFTPServer_Tests/Pods-YZZYFTPServer_Tests.debug.xcconfig
+Example/Pods/Target Support Files/Pods-YZZYFTPServer_Tests/Pods-YZZYFTPServer_Tests.release.xcconfig
+Example/Pods/**/**
