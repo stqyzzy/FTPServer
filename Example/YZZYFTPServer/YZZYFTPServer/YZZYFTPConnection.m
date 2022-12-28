@@ -82,6 +82,10 @@
     return self;
 }
 
+// STATE
+- (NSString *)connectionAddress {
+    return self.connectionSocket.connectedHost;
+}
 #pragma mark -
 #pragma mark - <#custom#> Delegate
 
