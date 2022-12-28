@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSFileHandle *currentFileHandle; // 保存文件的句柄
 @property (nonatomic, copy) NSString *rnfrFilenameString;
 @property (nonatomic, copy) NSString *currentUserString; // 当前连接的用户
-
+@property (nonatomic, strong) AsyncSocket *dataSocket; // 复制侦听套接字 - 工作时从代码中删除侦听套接字 - 似乎是这种情况。
 // 初始化方法
 - (instancetype)initWithAsyncSocket:(AsyncSocket*)newSocket forServer:(YZZYFTPServer *)myServer;
 @end

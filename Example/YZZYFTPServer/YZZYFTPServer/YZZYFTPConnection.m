@@ -17,6 +17,20 @@
 #pragma mark -
 #pragma mark - life cycle - 生命周期
 - (void)dealloc{
+    if (_connectionSocket) {
+        [self.connectionSocket setDelegate:nil];
+        [self.connectionSocket disconnect];
+    }
+    
+    if (_dataListeningSocket) {
+        [self.dataListeningSocket setDelegate:nil];
+        [self.dataListeningSocket disconnect];
+    }
+    
+    if (_dataSocket) {
+        [self.dataSocket setDelegate:nil];
+        [self.dataSocket disconnect];
+    }
     NSLog(@"%@ - dealloc", NSStringFromClass([self class]));
 }
 
