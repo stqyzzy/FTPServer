@@ -9,6 +9,21 @@
 #ifndef YZZYFTPDefines_h
 #define YZZYFTPDefines_h
 
+typedef NS_ENUM(NSUInteger, YZZYFTPTransferMode) {
+    YZZYFTPTransferModePASVFTP = 0,
+    YZZYFTPTransferModeEPSVFTP,
+    YZZYFTPTransferModePORTFTP,
+    YZZYFTPTransferModeLPRTFTP,
+    YZZYFTPTransferModeEPRTFTP
+};
+
+#define DATASTR(args) [args dataUsingEncoding:NSUTF8StringEncoding]
+
+#define READ_TIMEOUT -1
+
+#define FTP_CLIENT_REQUEST 0
+
+
 #ifdef DEBUG
 #define XMFTPLog(...) NSLog(__VA_ARGS__)
 #else

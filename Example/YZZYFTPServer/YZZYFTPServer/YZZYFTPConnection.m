@@ -7,7 +7,7 @@
 //
 
 #import "YZZYFTPConnection.h"
-
+#import "YZZYFTPDefines.h"
 @interface YZZYFTPConnection()
 
 @end
@@ -40,7 +40,33 @@
 
 #pragma mark -
 #pragma mark - public methods
-
+// 初始化方法
+- (instancetype)initWithAsyncSocket:(AsyncSocket*)newSocket forServer:(YZZYFTPServer *)myServer {
+    if (self = [super init]) {
+        self.connectionSocket = newSocket;
+        self.server = myServer;
+        self.connectionSocket.delegate = self;
+        // 向客户端发送欢迎消息
+        [self.connectionSocket writeData:DATASTR(@"220 iosFtp server ready.\r\n") withTimeout:-1 tag:0];
+        // 开始监听客户端当前连接的命令
+        [self.connectionSocket readDataToData:[AsyncSocket CRLFData] withTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
+        self.dataListeningSocket = nil;
+        self.dataPort = 2001;
+        self.transferMode = YZZYFTPTransferModePASVFTP;
+        self.queuedDataMutableArray = [[NSMutableArray alloc] init];
+        self.currentDirString = [self.server.baseDirString copy]; // 此连接的工作目录，在服务器设置为的目录中启动。 在服务器代码中将 chroot=true 设置为沙盒
+        self.currentFileString = nil;
+        self.currentFileHandle = nil;
+        self.rnfrFilenameString = nil;
+        self.currentUserString = nil;
+        
+        if (g_XMFTP_LogEnabled) {
+            XMFTPLog(@"FC: Current Directory starting at %@", self.currentDirString);
+        }
+        
+    }
+    return self;
+}
 
 #pragma mark -
 #pragma mark - <#custom#> Delegate
