@@ -91,7 +91,17 @@
 
 #pragma mark -
 #pragma mark - private methods
-
+// ASYNCSOCKET DATACONN CHOOSE DataSocekt
+-(BOOL)openDataSocket:(NSInteger)portNumber {
+    NSString *responseString;
+    NSError *error = nil;
+    if (self.dataSocket) {
+        // Socket和连接有内存泄露
+        self.dataSocket = nil;
+    }
+    self.dataSocket = [[AsyncSocket alloc] initWithDelegate:self];
+    // DataConnection
+}
 #pragma mark -
 #pragma mark - getters and setters
 
