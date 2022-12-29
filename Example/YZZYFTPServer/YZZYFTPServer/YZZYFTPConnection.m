@@ -110,15 +110,30 @@
 #pragma mark -
 #pragma mark - private methods
 // ASYNCSOCKET DATACONN CHOOSE DataSocekt
--(BOOL)openDataSocket:(NSInteger)portNumber {
+- (BOOL)openDataSocket:(UInt16)portNumber {
     NSString *responseString;
     NSError *error = nil;
     if (self.dataSocket) {
         // Socket和连接有内存泄露
         self.dataSocket = nil;
     }
+    // 创建一个Socket对象
     self.dataSocket = [[AsyncSocket alloc] initWithDelegate:self];
-    // DataConnection
+    if (self.dataConnection) {
+        self.dataConnection = nil;
+    }
+    switch (self.transferMode) {
+        case YZZYFTPTransferModePORTFTP:
+            self.dataPort = portNumber;
+            responseString = [NSString stringWithFormat:@"200 PORT command successful."];
+            // 连接到Server
+            [self.dataSocket connectToHost:[self connectionAddress] onPort:portNumber error:&error];
+            self.dataConnection = [[YZZYFTPDataConnection alloc] initWithAsyncSocket:self.dataSocket forConnection:self withQueuedData:self.queuedDataMutableArray];
+            break;
+            
+        default:
+            break;
+    }
 }
 #pragma mark -
 #pragma mark - getters and setters
