@@ -19,8 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface YZZYFTPDataConnection : NSObject
 @property (nonatomic, strong) AsyncSocket *dataSocket;
-@property (nonatomic, strong) YZZYFTPConnection *ftpConnection;                        // connection which generated data socket we are tied to
+@property (nonatomic, strong) YZZYFTPConnection *ftpConnection; // 生成我们绑定的数据套接字的连接
 @property (nonatomic, strong) AsyncSocket *dataListeningSocket;
+@property (nonatomic, strong) id dataConnection; // 目前还不知道有什么用，也不确定用strong还是weak修饰
 
 // ASYNCSOCKET DELEGATES
 @property (nonatomic, assign) YZZYFTPConnectionState connectionState;
