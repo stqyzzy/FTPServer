@@ -125,38 +125,43 @@
         self.dataConnection = nil;
     }
     switch (self.transferMode) {
-        case YZZYFTPTransferModePORTFTP:
+        case YZZYFTPTransferModePORTFTP: {
             self.dataPort = portNumber;
             responseString = [NSString stringWithFormat:@"200 PORT command successful."];
             // 连接到Server
             [self.dataSocket connectToHost:[self connectionAddress] onPort:portNumber error:&error];
             self.dataConnection = [[YZZYFTPDataConnection alloc] initWithAsyncSocket:self.dataSocket forConnection:self withQueuedData:self.queuedDataMutableArray];
             break;
-        case YZZYFTPTransferModeLPRTFTP:
+        }
+        case YZZYFTPTransferModeLPRTFTP: {
             self.dataPort = portNumber;
             responseString = [NSString stringWithFormat:@"228 Entering Long Passive Mode     (af, hal, h1, h2, h3,..., pal, p1, p2...)"]; //, dataPort >>8, dataPort & 0xff;
             [self.dataSocket connectToHost:[self connectionAddress] onPort:portNumber error:&error];
             self.dataConnection = [[YZZYFTPDataConnection alloc] initWithAsyncSocket:self.dataSocket forConnection:self withQueuedData:self.queuedDataMutableArray];
             break;
-        case YZZYFTPTransferModeEPRTFTP:
+        }
+        case YZZYFTPTransferModeEPRTFTP: {
             self.dataPort = portNumber;
             responseString = @"200 EPRT command successful.";
             [self.dataSocket connectToHost:[self connectionAddress] onPort:portNumber error:&error];
             self.dataConnection = [[YZZYFTPDataConnection alloc] initWithAsyncSocket:self.dataSocket forConnection:self withQueuedData:self.queuedDataMutableArray];
             break;
-        case YZZYFTPTransferModePASVFTP:
+        }
+        case YZZYFTPTransferModePASVFTP:{
             self.dataPort = [self choosePasvDataPort];
             NSString *addressString = [[self.connectionSocket localHost] stringByReplacingOccurrencesOfString:@"." withString:@","];
             responseString = [NSString stringWithFormat:@"227 Entering Passive Mode (%@,%d,%d)", addressString, self.dataPort>>8, self.dataPort&0xff];
             [self.dataSocket acceptOnPort:self.dataPort error:&error];
             self.dataConnection = nil; // 将从监听的套接字接起
             break;
-        case YZZYFTPTransferModeEPSVFTP:
+        }
+        case YZZYFTPTransferModeEPSVFTP:{
             self.dataPort = [self choosePasvDataPort];
             responseString = [NSString stringWithFormat:@"229 Entering Extended Passive Mode (|||%d|)", self.dataPort];
             [self.dataSocket acceptOnPort:self.dataPort error:&error];
             self.dataConnection = nil; // 将从监听的套接字接起
             break;
+        }
         default:
             break;
     }
