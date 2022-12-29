@@ -88,7 +88,12 @@
     [self.dataSocket readDataWithTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
 }
 
-
+- (void)closeConnection {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FDC:closeConnection");;
+    }
+    [self.dataSocket disconnect];
+}
 #pragma mark -
 #pragma mark - getters and setters
 
