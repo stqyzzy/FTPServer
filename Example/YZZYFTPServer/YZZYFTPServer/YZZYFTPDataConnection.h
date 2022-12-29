@@ -11,11 +11,21 @@
 =====================================================*/
 
 #import <Foundation/Foundation.h>
+#import "AsyncSocket.h"
+#import "YZZYFTPDefines.h"
 
+@class YZZYFTPConnection;
 NS_ASSUME_NONNULL_BEGIN
 
 @interface YZZYFTPDataConnection : NSObject
+@property (nonatomic, strong) AsyncSocket *dataSocket;
+@property (nonatomic, strong) YZZYFTPConnection *ftpConnection;                        // connection which generated data socket we are tied to
+
+// ASYNCSOCKET DELEGATES
+@property (nonatomic, assign) YZZYFTPConnectionState connectionState;
+- (instancetype)initWithAsyncSocket:(AsyncSocket *)newSocket forConnection:(id)aConnection withQueuedData:(NSMutableArray *)queuedData;
 
 @end
 
 NS_ASSUME_NONNULL_END
+ 

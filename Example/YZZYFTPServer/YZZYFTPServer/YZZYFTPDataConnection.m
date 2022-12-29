@@ -7,6 +7,7 @@
 //
 
 #import "YZZYFTPDataConnection.h"
+#import "YZZYFTPConnection.h"
 
 @interface YZZYFTPDataConnection()
 
@@ -40,14 +41,40 @@
 
 #pragma mark -
 #pragma mark - public methods
-
+- (instancetype)initWithAsyncSocket:(AsyncSocket *)newSocket forConnection:(id)aConnection withQueuedData:(NSMutableArray *)queuedData {
+    if (self = [super init]) {
+        self.dataSocket = newSocket;
+        self.ftpConnection = aConnection;
+        [self.dataSocket setDelegate:self];
+        if (queuedData.count > 0) {
+            if (g_XMFTP_LogEnabled) {
+                XMFTPLog(@"FC:Write Queued Data");
+            }
+            // writeQueuedData
+        }
+    }
+    return self;
+}
 
 #pragma mark -
 #pragma mark - <#custom#> Delegate
 
 #pragma mark -
 #pragma mark - private methods
+- (void)writeQueuedData:(NSMutableArray *)queuedData {
+    for (NSMutableData *data in queuedData) {
+        [self writeData:data];
+    }
+}
 
+- (void)writeData:(NSMutableData *)data {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FDC:writeData");
+    }
+    self.connectionState = YZZYFTPConnectionStateClientReceiving;
+    [self.dataSocket writeData:data withTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
+    [self.dataSocket readDataWithTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
+}
 #pragma mark -
 #pragma mark - getters and setters
 

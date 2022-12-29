@@ -23,6 +23,12 @@ typedef NS_ENUM(NSUInteger, YZZYFTPTransferMode) {
 
 #define FTP_CLIENT_REQUEST 0
 
+typedef NS_ENUM(NSInteger, YZZYFTPConnectionState) {
+    YZZYFTPConnectionStateClientSending = 0,
+    YZZYFTPConnectionStateClientReceiving = 1,
+    YZZYFTPConnectionStateClientQuiet = 2,
+    YZZYFTPConnectionStateClientSent = 3
+};
 
 #ifdef DEBUG
 #define XMFTPLog(...) NSLog(__VA_ARGS__)
@@ -30,5 +36,6 @@ typedef NS_ENUM(NSUInteger, YZZYFTPTransferMode) {
 #define XMFTPLog(...)
 #endif
 
+extern BOOL g_XMFTP_LogEnabled;
 
 #endif /* YZZYFTPDefines_h */
