@@ -153,6 +153,15 @@
     [self.dataSocket readDataWithTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
 }
 
+- (BOOL)onReadStreamEnded:(AsyncSocket *)sock {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FDC: onReadStreamEnded %d(clientSending is %d)", self.connectionState, YZZYFTPConnectionStateClientSending);
+    }
+    if (self.connectionState == YZZYFTPConnectionStateClientSent || self.connectionState == YZZYFTPConnectionStateClientSending) {
+        return YES;
+    }
+    return NO;
+}
 
 #pragma mark -
 #pragma mark - getters and setters
