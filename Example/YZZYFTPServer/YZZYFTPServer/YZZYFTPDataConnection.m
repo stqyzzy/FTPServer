@@ -75,6 +75,20 @@
     [self.dataSocket writeData:data withTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
     [self.dataSocket readDataWithTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
 }
+
+- (void)writeString:(NSString *)dataString {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FDC:writeStringData");
+    }
+    NSMutableData *data = [[dataString dataUsingEncoding:NSUTF8StringEncoding] mutableCopy];
+    // 拼接换行符
+    [data appendData:[AsyncSocket CRLFData]];
+    
+    [self.dataSocket writeData:data withTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
+    [self.dataSocket readDataWithTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
+}
+
+
 #pragma mark -
 #pragma mark - getters and setters
 
