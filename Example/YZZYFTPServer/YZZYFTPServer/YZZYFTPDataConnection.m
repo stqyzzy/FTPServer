@@ -9,7 +9,7 @@
 #import "YZZYFTPDataConnection.h"
 #import "YZZYFTPConnection.h"
 
-@interface YZZYFTPDataConnection()
+@interface YZZYFTPDataConnection()<AsyncSocketDelegate>
 @property (nonatomic, strong, readwrite) NSMutableData *receivedData;
 
 @end
@@ -80,6 +80,14 @@
 }
 #pragma mark -
 #pragma mark - ASYNCSOCKET Delegate
+-(BOOL)onSocketWillConnect:(AsyncSocket *)sock {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FDC:onSocketWillConnect");
+    }
+    [self.dataSocket readDataWithTimeout:READ_TIMEOUT tag:0];
+    return YES;
+}
+
 
 #pragma mark -
 #pragma mark - private methods
