@@ -8,6 +8,8 @@
 
 #import "YZZYFTPConnection.h"
 #import "YZZYFTPDefines.h"
+#include <sys/time.h>
+
 @interface YZZYFTPConnection()
 
 @end
@@ -130,10 +132,38 @@
             [self.dataSocket connectToHost:[self connectionAddress] onPort:portNumber error:&error];
             self.dataConnection = [[YZZYFTPDataConnection alloc] initWithAsyncSocket:self.dataSocket forConnection:self withQueuedData:self.queuedDataMutableArray];
             break;
+        case YZZYFTPTransferModeLPRTFTP:
+            self.dataPort = portNumber;
+            responseString = [ NSString stringWithFormat:@"228 Entering Long Passive Mode     (af, hal, h1, h2, h3,..., pal, p1, p2...)"]; //, dataPort >>8, dataPort & 0xff;
+            [self.dataSocket connectToHost:[self connectionAddress] onPort:portNumber error:&error];
+            self.dataConnection = [[YZZYFTPDataConnection alloc] initWithAsyncSocket:self.dataSocket forConnection:self withQueuedData:self.queuedDataMutableArray];
+            break;
+        case YZZYFTPTransferModeEPRTFTP:
+            self.dataPort = portNumber;
+            responseString = @"200 EPRT command successful.";
+            [self.dataSocket connectToHost:[self connectionAddress] onPort:portNumber error:&error];
+            self.dataConnection = [[YZZYFTPDataConnection alloc] initWithAsyncSocket:self.dataSocket forConnection:self withQueuedData:self.queuedDataMutableArray];
+            break;
+            
             
         default:
             break;
     }
+}
+
+- (int)choosePasvDataPort {
+    struct timeval tv;
+    unsigned short int seed[3];
+    
+    gettimeofday(&tv, NULL);
+    seed[0] = (tv.tv_sec >> 16) & 0xFFFF;
+    seed[1] = tv.tv_sec & 0xFFFF;
+    seed[2] = tv.tv_usec & 0xFFFF;
+    seed48(seed);
+    
+    int portNumber;
+    portNumber = (lrand48() % 64512) + 1024;
+    return portNumber;
 }
 #pragma mark -
 #pragma mark - getters and setters
