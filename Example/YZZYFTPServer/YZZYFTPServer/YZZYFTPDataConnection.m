@@ -106,6 +106,14 @@
     self.connectionState = YZZYFTPConnectionStateClientSent;
 }
 
+- (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FDC:didWriteData");
+    }
+    [self.ftpConnection didReceiveDataWritten]; // 通知我们已完成写入
+    [self.dataSocket readDataWithTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
+}
+
 
 
 #pragma mark -

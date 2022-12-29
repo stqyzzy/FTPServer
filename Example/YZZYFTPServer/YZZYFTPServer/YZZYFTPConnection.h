@@ -37,7 +37,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)connectionAddress;
 
 // ASYNCSOCKET DATACONNECTION
-- (void)didReceiveDataRead; // 来自FtpDataConnection的通知，表明数据已写入
+- (void)didReceiveDataRead; // FDC 读取数据（即传输）的通知
+
+// ASYNCSOCKET FTPCLIENT CONNECTION
+- (void)didReceiveDataWritten; // 来自FtpDataConnection的通知，表明数据已写入
 
 @end
 

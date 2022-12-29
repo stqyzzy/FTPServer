@@ -89,10 +89,16 @@
 
 
 // CHOOSE DATA SOCKET
-// 来自FtpDataConnection的通知，表明数据已写入
+// FDC 读取数据（即传输）的通知
 - (void)didReceiveDataRead {
     // 必须发送一个文件
 
+}
+
+// ASYNCSOCKET FTPCLIENT CONNECTION
+// 来自FtpDataConnection的通知，表明数据已写入
+- (void)didReceiveDataWritten {
+    
 }
 #pragma mark -
 #pragma mark - <#custom#> Delegate
