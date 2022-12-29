@@ -147,14 +147,25 @@
         case YZZYFTPTransferModePASVFTP:
             self.dataPort = [self choosePasvDataPort];
             NSString *addressString = [[self.connectionSocket localHost] stringByReplacingOccurrencesOfString:@"." withString:@","];
-            responseString = [NSString stringWithFormat:@"227 Entering Passive Mode (%@,%d,%d)", addressString, dataPort>>8, dataPort&0xff];
+            responseString = [NSString stringWithFormat:@"227 Entering Passive Mode (%@,%d,%d)", addressString, self.dataPort>>8, self.dataPort&0xff];
             [self.dataSocket acceptOnPort:self.dataPort error:&error];
-            self.dataConnection = nil;
+            self.dataConnection = nil; // 将从监听的套接字接起
             break;
-            
+        case YZZYFTPTransferModeEPSVFTP:
+            self.dataPort = [self choosePasvDataPort];
+            responseString = [NSString stringWithFormat:@"229 Entering Extended Passive Mode (|||%d|)", self.dataPort];
+            [self.dataSocket acceptOnPort:self.dataPort error:&error];
+            self.dataConnection = nil; // 将从监听的套接字接起
+            break;
         default:
             break;
     }
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"-- %@", [error localizedDescription]);
+    }
+    [self sendMessage:responseString];
+    
+    return YES;
 }
 
 - (int)choosePasvDataPort {
@@ -170,6 +181,18 @@
     int portNumber;
     portNumber = (lrand48() % 64512) + 1024;
     return portNumber;
+}
+
+// ASYNCSOCKET FTPCLIENT CONNECTION
+// calls FC  writedata
+- (void)sendMessage:(NSString *)ftpMessage {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@">%@",ftpMessage );
+    }
+    NSMutableData *dataString = [[ftpMessage dataUsingEncoding:NSUTF8StringEncoding] mutableCopy];
+    [dataString appendData:[AsyncSocket CRLFData]];
+    [self.connectionSocket writeData:dataString withTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
+    [self.connectionSocket readDataToData:[AsyncSocket CRLFData] withTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
 }
 #pragma mark -
 #pragma mark - getters and setters
