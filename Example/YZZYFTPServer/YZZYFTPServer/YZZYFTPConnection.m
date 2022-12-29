@@ -134,7 +134,7 @@
             break;
         case YZZYFTPTransferModeLPRTFTP:
             self.dataPort = portNumber;
-            responseString = [ NSString stringWithFormat:@"228 Entering Long Passive Mode     (af, hal, h1, h2, h3,..., pal, p1, p2...)"]; //, dataPort >>8, dataPort & 0xff;
+            responseString = [NSString stringWithFormat:@"228 Entering Long Passive Mode     (af, hal, h1, h2, h3,..., pal, p1, p2...)"]; //, dataPort >>8, dataPort & 0xff;
             [self.dataSocket connectToHost:[self connectionAddress] onPort:portNumber error:&error];
             self.dataConnection = [[YZZYFTPDataConnection alloc] initWithAsyncSocket:self.dataSocket forConnection:self withQueuedData:self.queuedDataMutableArray];
             break;
@@ -144,7 +144,13 @@
             [self.dataSocket connectToHost:[self connectionAddress] onPort:portNumber error:&error];
             self.dataConnection = [[YZZYFTPDataConnection alloc] initWithAsyncSocket:self.dataSocket forConnection:self withQueuedData:self.queuedDataMutableArray];
             break;
-            
+        case YZZYFTPTransferModePASVFTP:
+            self.dataPort = [self choosePasvDataPort];
+            NSString *addressString = [[self.connectionSocket localHost] stringByReplacingOccurrencesOfString:@"." withString:@","];
+            responseString = [NSString stringWithFormat:@"227 Entering Passive Mode (%@,%d,%d)", addressString, dataPort>>8, dataPort&0xff];
+            [self.dataSocket acceptOnPort:self.dataPort error:&error];
+            self.dataConnection = nil;
+            break;
             
         default:
             break;
