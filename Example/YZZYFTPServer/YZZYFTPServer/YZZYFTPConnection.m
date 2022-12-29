@@ -86,6 +86,14 @@
 - (NSString *)connectionAddress {
     return self.connectionSocket.connectedHost;
 }
+
+
+// CHOOSE DATA SOCKET
+// 来自FtpDataConnection的通知，表明数据已写入
+- (void)didReceiveDataRead {
+    // 必须发送一个文件
+
+}
 #pragma mark -
 #pragma mark - <#custom#> Delegate
 

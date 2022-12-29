@@ -35,6 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithAsyncSocket:(AsyncSocket*)newSocket forServer:(YZZYFTPServer *)myServer;
 // STATE
 - (NSString *)connectionAddress;
+
+// ASYNCSOCKET DATACONNECTION
+- (void)didReceiveDataRead; // 来自FtpDataConnection的通知，表明数据已写入
+
 @end
 
 NS_ASSUME_NONNULL_END

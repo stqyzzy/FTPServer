@@ -94,6 +94,20 @@
         XMFTPLog(@"FDC:New Connection -- shouldn't be called");
     }
 }
+
+- (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FDC:didReadData");;
+    }
+    [self.dataSocket readDataWithTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
+    self.receivedData = [data mutableCopy];
+    // 通知连接数据通过，通知连接，让它知道去写文件
+    [self.ftpConnection didReceiveDataRead];
+    self.connectionState = YZZYFTPConnectionStateClientSent;
+}
+
+
+
 #pragma mark -
 #pragma mark - private methods
 - (void)writeQueuedData:(NSArray *)queuedData {
