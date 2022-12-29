@@ -20,11 +20,15 @@ NS_ASSUME_NONNULL_BEGIN
 @interface YZZYFTPDataConnection : NSObject
 @property (nonatomic, strong) AsyncSocket *dataSocket;
 @property (nonatomic, strong) YZZYFTPConnection *ftpConnection;                        // connection which generated data socket we are tied to
+@property (nonatomic, strong) AsyncSocket *dataListeningSocket;
 
 // ASYNCSOCKET DELEGATES
 @property (nonatomic, assign) YZZYFTPConnectionState connectionState;
-- (instancetype)initWithAsyncSocket:(AsyncSocket *)newSocket forConnection:(id)aConnection withQueuedData:(NSMutableArray *)queuedData;
+@property (nonatomic, strong, readonly) NSMutableData *receivedData;
 
+- (instancetype)initWithAsyncSocket:(AsyncSocket *)newSocket forConnection:(id)aConnection withQueuedData:(NSMutableArray *)queuedData;
+- (void)writeData:(NSMutableData *)data;
+- (void)closeConnection;
 @end
 
 NS_ASSUME_NONNULL_END

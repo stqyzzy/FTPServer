@@ -10,6 +10,7 @@
 #import "YZZYFTPConnection.h"
 
 @interface YZZYFTPDataConnection()
+@property (nonatomic, strong, readwrite) NSMutableData *receivedData;
 
 @end
 
@@ -51,20 +52,15 @@
                 XMFTPLog(@"FC:Write Queued Data");
             }
             // writeQueuedData
+            [self writeQueuedData:[queuedData copy]];
+            [queuedData removeAllObjects]; // 清理缓存数据
         }
+        [self.dataSocket readDataWithTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
+        self.dataListeningSocket = nil;
+        self.receivedData = nil;
+        self.connectionState = YZZYFTPConnectionStateClientQuiet;
     }
     return self;
-}
-
-#pragma mark -
-#pragma mark - <#custom#> Delegate
-
-#pragma mark -
-#pragma mark - private methods
-- (void)writeQueuedData:(NSMutableArray *)queuedData {
-    for (NSMutableData *data in queuedData) {
-        [self writeData:data];
-    }
 }
 
 - (void)writeData:(NSMutableData *)data {
@@ -74,6 +70,23 @@
     self.connectionState = YZZYFTPConnectionStateClientReceiving;
     [self.dataSocket writeData:data withTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
     [self.dataSocket readDataWithTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
+}
+
+- (void)closeConnection {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FDC:closeConnection");;
+    }
+    [self.dataSocket disconnect];
+}
+#pragma mark -
+#pragma mark - ASYNCSOCKET Delegate
+
+#pragma mark -
+#pragma mark - private methods
+- (void)writeQueuedData:(NSArray *)queuedData {
+    for (NSMutableData *data in queuedData) {
+        [self writeData:data];
+    }
 }
 
 - (void)writeString:(NSString *)dataString {
@@ -88,12 +101,7 @@
     [self.dataSocket readDataWithTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
 }
 
-- (void)closeConnection {
-    if (g_XMFTP_LogEnabled) {
-        XMFTPLog(@"FDC:closeConnection");;
-    }
-    [self.dataSocket disconnect];
-}
+
 #pragma mark -
 #pragma mark - getters and setters
 
