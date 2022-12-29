@@ -88,7 +88,12 @@
     return YES;
 }
 
-
+- (void)onSocket:(AsyncSocket *)sock didAcceptNewSocket:(AsyncSocket *)newSocket {
+    // 这不应该发生 - 我们应该已经连接 - 并且没有设置侦听套接字
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FDC:New Connection -- shouldn't be called");
+    }
+}
 #pragma mark -
 #pragma mark - private methods
 - (void)writeQueuedData:(NSArray *)queuedData {
