@@ -100,6 +100,10 @@
 - (void)didReceiveDataWritten {
     
 }
+
+- (void)didFinishReading {
+    
+}
 #pragma mark -
 #pragma mark - <#custom#> Delegate
 

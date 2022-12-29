@@ -114,6 +114,23 @@
     [self.dataSocket readDataWithTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
 }
 
+- (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FDC:willDisconnect");
+    }
+    if (self.connectionState == YZZYFTPConnectionStateClientSending) {
+        if (g_XMFTP_LogEnabled) {
+            XMFTPLog(@"FDC::did FinishReading");;
+        }
+        // 希望这是连接的结束
+    } else {
+        if (g_XMFTP_LogEnabled) {
+            XMFTPLog(@"FDC: we werent expecting this as we never set clientSending  prob late coming up");
+        }
+    }
+    // 连接结束，发送这条消息
+    [self.ftpConnection didFinishReading];
+}
 
 
 #pragma mark -

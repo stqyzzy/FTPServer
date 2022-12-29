@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // ASYNCSOCKET FTPCLIENT CONNECTION
 - (void)didReceiveDataWritten; // 来自FtpDataConnection的通知，表明数据已写入
-
+- (void)didFinishReading;
 @end
 
 NS_ASSUME_NONNULL_END
