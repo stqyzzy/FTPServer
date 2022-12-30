@@ -94,7 +94,13 @@
 // FDC 读取数据（即传输）的通知
 - (void)didReceiveDataRead {
     // 必须发送一个文件
-
+    if (self.currentFileHandle != nil) {
+        [self.currentFileHandle writeData:self.dataConnection.receivedData];
+    } else {
+        if (g_XMFTP_LogEnabled) {
+            XMFTPLog(@"Couldn't write data");
+        }
+    }
 }
 
 // ASYNCSOCKET FTPCLIENT CONNECTION
