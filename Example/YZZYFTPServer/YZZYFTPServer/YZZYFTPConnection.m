@@ -106,7 +106,11 @@
 // ASYNCSOCKET FTPCLIENT CONNECTION
 // 来自FtpDataConnection的通知，表明数据已写入
 - (void)didReceiveDataWritten {
-    
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"SENDING COMPLETED");
+    }
+    [self sendMessage:@"226 Transfer complete."]; // 发送完成消息给客户端
+    [self.dataConnection closeConnection];
 }
 
 - (void)didFinishReading {
