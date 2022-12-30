@@ -57,7 +57,7 @@
 #pragma mark -
 #pragma mark - public methods
 // 初始化方法
-- (instancetype)initWithAsyncSocket:(AsyncSocket*)newSocket forServer:(YZZYFTPServer *)myServer {
+- (instancetype)initWithAsyncSocket:(AsyncSocket *)newSocket forServer:(YZZYFTPServer *)myServer {
     if (self = [super init]) {
         self.connectionSocket = newSocket;
         self.server = myServer;
@@ -156,7 +156,7 @@
     self.dataConnection = [[YZZYFTPDataConnection alloc] initWithAsyncSocket:newSocket forConnection:self withQueuedData:self.queuedDataMutableArray];
 }
 
-// 读物数据
+// 从Socket读物数据，即从Socket连接收到数据
 - (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
     if (g_XMFTP_LogEnabled) {
         XMFTPLog(@"FC:didReadData");
