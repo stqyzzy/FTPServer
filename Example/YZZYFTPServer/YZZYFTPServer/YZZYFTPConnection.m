@@ -10,7 +10,7 @@
 #import "YZZYFTPDefines.h"
 #include <sys/time.h>
 
-@interface YZZYFTPConnection()
+@interface YZZYFTPConnection()<AsyncSocketDelegate>
 
 @end
 
@@ -138,7 +138,15 @@
     self.dataConnection.connectionState = YZZYFTPConnectionStateClientQuiet;
 }
 #pragma mark -
-#pragma mark - <#custom#> Delegate
+#pragma mark - AsyncSocketDelegate Delegate
+- (BOOL)onSocketWillConnect:(AsyncSocket *)sock {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FC:onSocketWillConnect");
+    }
+    [sock readDataWithTimeout:READ_TIMEOUT tag:0];
+    return YES;
+}
+
 
 #pragma mark -
 #pragma mark - private methods
