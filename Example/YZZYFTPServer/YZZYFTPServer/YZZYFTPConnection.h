@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) YZZYFTPTransferMode transferMode; // FTP传输模式
 @property (nonatomic, copy) NSString *currentFileString; // 将要上传的文件路径
 @property (nonatomic, copy) NSString *currentDirString; // 此连接的工作目录，在服务器设置为的目录中启动。 在服务器代码中将 chroot=true 设置为沙盒
-@property (nonatomic, copy) NSString *rnfrFilenameString;
+@property (nonatomic, copy) NSString *rnfrFilenameString; //FTP命令重命名
 
 // 初始化方法
 - (instancetype)initWithAsyncSocket:(AsyncSocket*)newSocket forServer:(YZZYFTPServer *)myServer;
