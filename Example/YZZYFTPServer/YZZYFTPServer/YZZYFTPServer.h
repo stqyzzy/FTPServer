@@ -15,8 +15,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol YZZYFTPServerNotification <NSObject>
+// NOTIFICATIONS
+- (void)didReceiveFileListChanged;
+@end
+
 @interface YZZYFTPServer : NSObject <AsyncSocketDelegate>
-@property (nonatomic, strong) id notificationObject; // 通知的对象
+@property (nonatomic, strong) id<YZZYFTPServerNotification> notificationObject; // 通知的对象
 @property (nonatomic, copy) NSDictionary *commandsDic; // 命令字典
 @property (nonatomic, copy) NSMutableArray *connectionsMutableArray; // 连接数组
 @property (nonatomic, assign) NSInteger portNumber; // 端口号
@@ -30,7 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithPort:(unsigned)serverPort withDir:(NSString*)aDirectory notifyObject:(id)sender;
 // 停止FTP服务
 - (void)stopFtpServer;
-
+// NOTIFICATIONS
+- (void)didReceiveFileListChanged;
 @end
 
 NS_ASSUME_NONNULL_END

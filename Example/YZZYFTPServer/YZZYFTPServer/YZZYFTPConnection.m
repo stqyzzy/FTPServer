@@ -113,8 +113,29 @@
     [self.dataConnection closeConnection];
 }
 
+// 我们假定，在从客户端的数据连接结束时调用
 - (void)didFinishReading {
+    if (self.currentFileString) {
+        if (g_XMFTP_LogEnabled) {
+            XMFTPLog(@"Closing File Handle");
+        }
+        self.currentFileString = nil;
+    } else {
+        if (g_XMFTP_LogEnabled) {
+            XMFTPLog(@"FC:Data Sent but not sure where its for ");
+        }
+    }
+    [self sendMessage:@"226 Transfer complete."]; // 发送完成消息给客户端
     
+    if (self.currentFileHandle != nil) {
+        if (g_XMFTP_LogEnabled) {
+            XMFTPLog(@"Closing File Handle");
+        }
+        [self.currentFileHandle closeFile];
+        self.currentFileHandle = nil;
+        [self.server didReceiveFileListChanged];
+    }
+    self.dataConnection.connectionState = YZZYFTPConnectionStateClientQuiet;
 }
 #pragma mark -
 #pragma mark - <#custom#> Delegate

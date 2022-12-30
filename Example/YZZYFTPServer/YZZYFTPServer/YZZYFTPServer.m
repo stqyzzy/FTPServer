@@ -99,6 +99,13 @@ BOOL g_XMFTP_LogEnabled = NO;
     [self.connectionsMutableArray removeAllObjects];
 }
 
+// NOTIFICATIONS
+- (void)didReceiveFileListChanged {
+    if ([self.notificationObject respondsToSelector:@selector(didReceiveFileListChanged)]) {
+        [self.notificationObject didReceiveFileListChanged];
+    }
+}
+
 #pragma mark -
 #pragma mark - ASYNCSOCKET Delegate
 - (void)onSocket:(AsyncSocket *)sock didAcceptNewSocket:(AsyncSocket *)newSocket {
