@@ -318,6 +318,17 @@
         [self.queuedDataMutableArray addObject:data];
     }
 }
+
+- (void)sendData:(NSMutableData *)data {
+    if (self.dataConnection) {
+        if (g_XMFTP_LogEnabled) {
+            XMFTPLog(@"FC:sendData");
+        }
+        [self.dataConnection writeData:data];
+    } else {
+        [self.queuedDataMutableArray addObject:data];
+    }
+}
 #pragma mark -
 #pragma mark - getters and setters
 
