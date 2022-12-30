@@ -285,7 +285,7 @@
             SEL action = NSSelectorFromString(commandSelectorString); // 根据方法名创建方法对象
             if ([self respondsToSelector:action]) {
                 // 执行命令
-                NSLog(@"stq-------commandSelector = %@", commandSelector);
+                NSLog(@"stq-------commandSelector = %@", commandSelectorString);
                 [self performSelector:action withObject:self withObject:self.msgComponentsArray]; // 执行带参数的命令
             } else {
                 // 未知的命令
