@@ -155,6 +155,15 @@
     }
     self.dataConnection = [[YZZYFTPDataConnection alloc] initWithAsyncSocket:newSocket forConnection:self withQueuedData:self.queuedDataMutableArray];
 }
+
+// 读物数据
+- (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FC:didReadData");
+    }
+    [self.connectionSocket readDataToData:[AsyncSocket CRLFData] withTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST]; // 开始读取数据
+    
+}
 #pragma mark -
 #pragma mark - private methods
 // ASYNCSOCKET DATACONN CHOOSE DataSocekt
@@ -244,6 +253,50 @@
     [dataString appendData:[AsyncSocket CRLFData]];
     [self.connectionSocket writeData:dataString withTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
     [self.connectionSocket readDataToData:[AsyncSocket CRLFData] withTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST];
+}
+
+// PROCESS
+// 将数据转成客户端连接的命令
+- (void)processDataRead:(NSData *)data {
+    NSData *strData = [data subdataWithRange:NSMakeRange(0, data.length - 2)]; // 删掉最后两个字符
+    NSString *crlfMessageString = [[NSString alloc] initWithData:strData encoding:self.server.clientEncoding];
+    NSString *messageString = [crlfMessageString stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"<%@", messageString );
+    }
+    self.msgComponentsArray = [messageString componentsSeparatedByString:@" "]; // 将其更改为使用空格 - 对于 FTP 协议
+    [self processCommand];
+    [self.connectionSocket readDataToData:[AsyncSocket CRLFData] withTimeout:-1 tag:0]; // 强制读取数据检查
+}
+
+// 假设数据已放置在数组msgComponentsArray中
+- (void)processCommand {
+    NSString *commandString = [self.msgComponentsArray objectAtIndex:0];
+    if (commandString.length > 0) {
+        // 搜索命令字典，找到它调用的命令和方法
+        NSString *commandSelectorString = [[[self.server commandsDic] objectForKey:[commandString lowercaseString]] stringByAppendingString:@"arguments:"];
+        if (commandSelectorString) {
+            SEL action = NSSelectorFromString(commandSelectorString); // 根据方法名创建方法对象
+            if ([self respondsToSelector:action]) {
+                // 执行命令
+                NSLog(@"stq-------commandSelector = %@", commandSelector);
+                [self performSelector:action withObject:self withObject:self.msgComponentsArray]; // 执行带参数的命令
+            } else {
+                // 未知的命令
+                NSString *outputString = [NSString stringWithFormat:@"500 '%@': command not understood.", commandString];
+                [self sendMessage:outputString];
+                if (g_XMFTP_LogEnabled) {
+                    XMFTPLog(@"DONT UNDERSTAND");
+                }
+            }
+        } else {
+            // 未知的命令
+            NSString *outputString = [NSString stringWithFormat:@"500 '%@': command not understood.", commandString];
+            [self sendMessage:outputString];
+        }
+    } else {
+        // 输出错误信息
+    }
 }
 #pragma mark -
 #pragma mark - getters and setters

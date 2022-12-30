@@ -27,6 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *currentUserString; // 当前连接的用户
 @property (nonatomic, strong) AsyncSocket *dataSocket; // 复制侦听套接字 - 工作时从代码中删除侦听套接字 - 似乎是这种情况。
 @property (nonatomic, strong) YZZYFTPDataConnection *dataConnection; // 处理生成的数据连接套接字实例
+@property (nonatomic, copy) NSArray *msgComponentsArray; // 将收到的消息拆成数组
+
 // STATE
 @property (nonatomic, assign) YZZYFTPTransferMode transferMode; // FTP传输模式
 @property (nonatomic, copy) NSString *currentFileString; // 将要上传的文件路径
