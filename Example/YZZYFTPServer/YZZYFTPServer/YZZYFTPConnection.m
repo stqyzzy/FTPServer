@@ -304,6 +304,20 @@
         // 输出错误信息
     }
 }
+
+- (void)sendDataString:(NSString *)dataString {
+    NSMutableString *messageString = [[NSMutableString alloc] initWithString:dataString];
+    CFStringNormalize((CFMutableStringRef)messageString, kCFStringNormalizationFormC);
+    NSMutableData *data = [[messageString dataUsingEncoding:self.server.clientEncoding] mutableCopy];
+    if (self.dataConnection) {
+        if (g_XMFTP_LogEnabled) {
+             XMFTPLog(@"FC:sendData");
+        }
+        [self.dataConnection writeData:data];
+    } else {
+        [self.queuedDataMutableArray addObject:data];
+    }
+}
 #pragma mark -
 #pragma mark - getters and setters
 
