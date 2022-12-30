@@ -147,7 +147,14 @@
     return YES;
 }
 
-
+// 以2001端口的数据连接（data Connection）使用
+- (void)onSocket:(AsyncSocket *)sock didAcceptNewSocket:(AsyncSocket *)newSocket {
+    // 打开的被动连接套接字 - 连接到此的新套接字，即被动连接（passive connection）
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FC:New Connection -- should be for the data port");
+    }
+    self.dataConnection = [[YZZYFTPDataConnection alloc] initWithAsyncSocket:newSocket forConnection:self withQueuedData:self.queuedDataMutableArray];
+}
 #pragma mark -
 #pragma mark - private methods
 // ASYNCSOCKET DATACONN CHOOSE DataSocekt
