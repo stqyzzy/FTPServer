@@ -165,6 +165,11 @@
     // 将数据转换成方法并执行
     [self processDataRead:data];
 }
+
+- (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag {
+    // 开始读取数据
+    [self.connectionSocket readDataToData:[AsyncSocket CRLFData] withTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST ];
+}
 #pragma mark -
 #pragma mark - private methods
 // ASYNCSOCKET DATACONN CHOOSE DataSocekt
