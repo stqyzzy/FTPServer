@@ -162,7 +162,8 @@
         XMFTPLog(@"FC:didReadData");
     }
     [self.connectionSocket readDataToData:[AsyncSocket CRLFData] withTimeout:READ_TIMEOUT tag:FTP_CLIENT_REQUEST]; // 开始读取数据
-    
+    // 将数据转换成方法并执行
+    [self processDataRead:data];
 }
 #pragma mark -
 #pragma mark - private methods
