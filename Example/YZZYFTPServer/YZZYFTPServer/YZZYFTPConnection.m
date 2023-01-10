@@ -329,6 +329,20 @@
         [self.queuedDataMutableArray addObject:data];
     }
 }
+
+#pragma mark COMMANDS
+// 断开连接命令
+- (void)doQuit:(id)sender arguments:(NSArray *)arguments {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"Quit : %@",arguments);
+    }
+    [self sendMessage:@"221- Data traffic for this session was 0 bytes in 0 files"];
+    [self sendMessage:@"221 Thank you for using the FTP service on localhost."];
+    if (self.connectionSocket) {
+        [self.connectionSocket disconnectAfterWriting];
+    }
+    
+}
 #pragma mark -
 #pragma mark - getters and setters
 

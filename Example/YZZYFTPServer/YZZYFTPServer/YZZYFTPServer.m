@@ -8,6 +8,7 @@
 
 #import "YZZYFTPServer.h"
 #import "YZZYFTPDefines.h"
+#import "YZZYFTPConnection.h"
 
 BOOL g_XMFTP_LogEnabled = NO;
 
@@ -109,8 +110,24 @@ BOOL g_XMFTP_LogEnabled = NO;
 #pragma mark -
 #pragma mark - ASYNCSOCKET Delegate
 - (void)onSocket:(AsyncSocket *)sock didAcceptNewSocket:(AsyncSocket *)newSocket {
-    
+    YZZYFTPConnection *newConnection = [[YZZYFTPConnection alloc] initWithAsyncSocket:newSocket forServer:self];
+    [self.connectionsMutableArray addObject:newConnection]; // 添加到连接数组中
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FS:didAcceptNewSocket  port:%i", [sock localPort]);
+    }
+    if ([sock localPort] == self.portNumber) {
+        if (g_XMFTP_LogEnabled) {
+            XMFTPLog(@"Connection on Server Port");
+        }
+    } else {
+        // 必须是数据通信端口，生成一个数据通信端口，查找具有相同端口的连接，并连接它
+        if (g_XMFTP_LogEnabled) {
+            XMFTPLog(@"--ERROR %i, %d", [sock localPort], self.portNumber);
+        }
+    }
 }
+
+
 #pragma mark -
 #pragma mark - private methods
 
