@@ -37,6 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)stopFtpServer;
 // NOTIFICATIONS
 - (void)didReceiveFileListChanged;
+// CONNECTIONS
+- (void)closeConnection:(id)theConnection;
 @end
 
 NS_ASSUME_NONNULL_END

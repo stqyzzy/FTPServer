@@ -107,6 +107,12 @@ BOOL g_XMFTP_LogEnabled = NO;
     }
 }
 
+// CONNECTIONS
+- (void)closeConnection:(id)theConnection {
+    // 在连接数组中搜索该连接并删除
+    // 该连接被释放并销毁
+    [self.connectionsMutableArray removeObject:theConnection];
+}
 #pragma mark -
 #pragma mark - ASYNCSOCKET Delegate
 - (void)onSocket:(AsyncSocket *)sock didAcceptNewSocket:(AsyncSocket *)newSocket {
