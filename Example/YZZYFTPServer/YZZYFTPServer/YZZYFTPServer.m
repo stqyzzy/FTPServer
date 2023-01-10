@@ -22,6 +22,9 @@ BOOL g_XMFTP_LogEnabled = NO;
 #pragma mark - life cycle - 生命周期
 - (void)dealloc{
     NSLog(@"%@ - dealloc", NSStringFromClass([self class]));
+    if (self.listenSocket) {
+        [self.listenSocket disconnect];
+    }
 }
 
 - (instancetype)init{
