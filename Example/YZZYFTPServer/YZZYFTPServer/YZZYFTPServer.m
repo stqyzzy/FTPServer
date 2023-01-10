@@ -9,7 +9,7 @@
 #import "YZZYFTPServer.h"
 #import "YZZYFTPDefines.h"
 #import "YZZYFTPConnection.h"
-
+#import "YZZYFTPHelper.h"
 BOOL g_XMFTP_LogEnabled = NO;
 
 @interface YZZYFTPServer()
@@ -115,6 +115,10 @@ BOOL g_XMFTP_LogEnabled = NO;
     // 在连接数组中搜索该连接并删除
     // 该连接被释放并销毁
     [self.connectionsMutableArray removeObject:theConnection];
+}
+
+- (NSString *)createList:(NSString *)directoryPath {
+    return createList(directoryPath);
 }
 #pragma mark -
 #pragma mark - ASYNCSOCKET Delegate

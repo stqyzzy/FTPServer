@@ -40,7 +40,10 @@
 
 #pragma mark -
 #pragma mark - public methods
-
+NSString *createList(NSString *directoryPath) {
+    NSFileManager *fileManaer = [NSFileManager defaultManager];
+    NSDictionary *fileAtttributes;
+}
 
 #pragma mark -
 #pragma mark - <#custom#> Delegate

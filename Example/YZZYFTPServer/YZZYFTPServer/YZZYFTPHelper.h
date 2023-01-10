@@ -17,5 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface YZZYFTPHelper : NSObject
 
 @end
+#pragma mark LS replacement
+NSString *createList(NSString *directoryPath);
 
 NS_ASSUME_NONNULL_END

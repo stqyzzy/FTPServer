@@ -39,6 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)didReceiveFileListChanged;
 // CONNECTIONS
 - (void)closeConnection:(id)theConnection;
+- (NSString *)createList:(NSString *)directoryPath;
 @end
 
 NS_ASSUME_NONNULL_END
