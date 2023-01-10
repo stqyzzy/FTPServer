@@ -127,6 +127,11 @@ BOOL g_XMFTP_LogEnabled = NO;
     }
 }
 
+- (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FtpServer:didConnectToHost  port:%i", [sock localPort]);
+    }
+}
 
 #pragma mark -
 #pragma mark - private methods
