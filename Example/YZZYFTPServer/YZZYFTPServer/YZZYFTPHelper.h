@@ -15,9 +15,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface YZZYFTPHelper : NSObject
-
++ (NSString *)localIPAddress;
 @end
 #pragma mark LS replacement
 NSString *createList(NSString *directoryPath);
+int filesinDirectory(NSString *filePath );
+NSString *int2BinString(int x);
+NSString *byte2String(int x);
+NSString *bin2perms(NSString *binaryValue);
 
 NS_ASSUME_NONNULL_END
+
