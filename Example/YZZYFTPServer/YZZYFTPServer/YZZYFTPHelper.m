@@ -8,6 +8,13 @@
 
 #import "YZZYFTPHelper.h"
 
+#import <SystemConfiguration/SystemConfiguration.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <ifaddrs.h>
+
 @interface YZZYFTPHelper()
 
 @end
@@ -15,8 +22,32 @@
 @implementation YZZYFTPHelper
 
 // 获得IP地址
-
++ (NSString *)localIPAddress {
+    NSString *address = @"error";
+    struct ifaddrs *interfaces = NULL;
+    struct ifaddrs *temp_addr = NULL;
+    int success = 0;
+    // 检索当前接口 成功时返回0
+    success = getifaddrs(&interfaces);
+    if (success == 0) {
+        // 循环连接的接口
+        temp_addr = interfaces;
+        while (temp_addr != NULL) {
+            if (temp_addr->ifa_addr->sa_family == AF_INET) {
+                // 检查接口是否为en0，这是iPhone上的wifi连接
+                if ([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:@"en0"]) {
+                    // Get NSString from C String
+                    address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
+                }
+            }
+            temp_addr = temp_addr->ifa_next;
+        }
+    }
+    freeifaddrs(interfaces);
+    return address;
+}
 @end
+
 NSString *createList(NSString *directoryPath) {
     NSFileManager *fileManager = [NSFileManager defaultManager]; // 文件管理器
     NSDictionary *fileAtttributes; // 文件属性
