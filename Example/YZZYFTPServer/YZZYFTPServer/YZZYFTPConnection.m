@@ -440,9 +440,9 @@
 - (void)doLprt:(id)sender arguments:(NSArray *)arguments {
     // LPRT,"6,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,231,92"
     NSString *socketDescString = [arguments objectAtIndex:1];
-    NSArray *socketAddrString = [socketDescString componentsSeparatedByString:@","];
-    int hb = [[socketAddrString objectAtIndex:19] intValue];
-    int lb = [[socketAddrString objectAtIndex:20] intValue];
+    NSArray *socketAddrArray = [socketDescString componentsSeparatedByString:@","];
+    int hb = [[socketAddrArray objectAtIndex:19] intValue];
+    int lb = [[socketAddrArray objectAtIndex:20] intValue];
     if (g_XMFTP_LogEnabled) {
         XMFTPLog(@"%d %d %d", hb<<8, hb, lb);
     }
@@ -451,6 +451,23 @@
     [sender openDataSocket:clientPort];
 }
 
+// 为服务器指定要连接的扩展地址和端口
+- (void)doEprt:(id)sender arguments:(NSArray *)arguments {
+    // EPRT |2|1080::8:800:200C:417A|5282|
+    NSString *socketDescString = [arguments objectAtIndex:1];
+    NSArray *socketAddrArray = [socketDescString componentsSeparatedByString:@"|"];
+    if (g_XMFTP_LogEnabled) {
+        for (NSString *item in socketAddrArray) {
+            XMFTPLog(@"%@", item);
+        }
+    }
+    int clientPort = [[socketAddrArray objectAtIndex:3] intValue];
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"Got Send Port %d", clientPort);
+    }
+    [sender setTransferMode:YZZYFTPTransferModeEPRTFTP];
+    [sender openDataSocket:clientPort];
+}
 
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
