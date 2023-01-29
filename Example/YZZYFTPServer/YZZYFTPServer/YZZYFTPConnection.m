@@ -341,7 +341,7 @@
     if (self.connectionSocket) {
         [self.connectionSocket disconnectAfterWriting];
     }
-    
+    [self.server closeConnection:self]; //  告知服务端关闭该连接，将该服务从连接列表中移除
 }
 #pragma mark -
 #pragma mark - getters and setters
