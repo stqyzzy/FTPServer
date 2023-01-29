@@ -330,7 +330,7 @@
     }
 }
 
-#pragma mark COMMANDS
+#pragma mark COMMANDS - https://zh.m.wikipedia.org/zh-hans/FTP命令列表
 // 断开连接命令
 - (void)doQuit:(id)sender arguments:(NSArray *)arguments {
     if (g_XMFTP_LogEnabled) {
@@ -359,6 +359,19 @@
         }
         [sender sendMessage:outputString];
     }
+}
+
+// 密码认证
+- (void)doPass:(id)sender arguments:(NSArray *)arguments {
+    NSString *receivedPasswordString = [arguments objectAtIndex:1]; // 收到的密码
+    NSString *outputString = @"";
+    NSString *localPasswordString = @"123"; // 本地的正确密码
+    if ([receivedPasswordString isEqualToString:localPasswordString]) {
+        outputString = [NSString stringWithFormat:@"230 User %@ logged in.", self.currentUserString];
+    } else {
+        outputString = @"500 Invalid username or password\n";
+    }
+    [sender sendMessage:outputString];
 }
 #pragma mark -
 #pragma mark - getters and setters
