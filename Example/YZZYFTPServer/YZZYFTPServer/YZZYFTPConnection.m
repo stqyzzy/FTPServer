@@ -480,6 +480,23 @@
     [sender setTransferMode:YZZYFTPTransferModeEPSVFTP];
     [sender openDataSocket:0];
 }
+
+// 指定服务器要连接的地址和端口
+- (void)doPort:(id)sender arguments:(NSArray *)arguments {
+    int hb, lb;
+    // 端口格式如下：PORT 127,0,0,1,197,251
+    // 获取第二个参数并以“,”拆分，然后取最后2位
+    NSString *socketDescString = [arguments objectAtIndex:1];
+    NSArray *socketAddrArray = [socketDescString componentsSeparatedByString:@","];
+    
+    hb = [[socketAddrArray objectAtIndex:4] intValue];
+    lb = [[socketAddrArray objectAtIndex:5] intValue];
+    
+    int clientPort = (hb << 8) + lb;
+    [sender setTransferMode:YZZYFTPTransferModePORTFTP];
+    [sender openDataSocket:clientPort];
+}
+
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
     NSString *fileNameString = @"";
