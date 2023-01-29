@@ -474,6 +474,12 @@
     [sender setTransferMode:YZZYFTPTransferModePASVFTP];
     [sender openDataSocket:0];
 }
+
+// 进入扩展被动模式
+- (void)doEpsv:(id)sender arguments:(NSArray *)arguments {
+    [sender setTransferMode:YZZYFTPTransferModeEPSVFTP];
+    [sender openDataSocket:0];
+}
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
     NSString *fileNameString = @"";
