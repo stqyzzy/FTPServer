@@ -497,6 +497,12 @@
     [sender openDataSocket:clientPort];
 }
 
+// 为特性选择选项
+- (void)doOpts:(id)sender arguments:(NSArray *)arguments {
+    NSString *cmd = [arguments objectAtIndex:1];
+    NSString *cmdstr = [NSString stringWithFormat:@"502 Unknown command '%@'",cmd];
+    [sender sendMessage:cmdstr];
+}
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
     NSString *fileNameString = @"";
