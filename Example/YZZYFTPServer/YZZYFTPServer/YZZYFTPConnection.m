@@ -538,7 +538,43 @@
     [self doList:sender arguments:arguments];
 }
 
-
+// 接收数据并且在服务器站点保存为文件
+- (void)doStor:(id)sender arguments:(NSArray *)arguments {
+    // 以存储my filename here.mp3 文件为例， STOR = 0，my = 1，filename = 2等
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *fileNameString = [self fileNameFromArgs:arguments];
+    NSString *cmdString;
+    self.currentFileString = [self makeFilePathFrom:fileNameString];
+    // 检查这是否在我们允许写入的文件系统区域内
+    if ([self validNewFilePath:self.currentFileString]) {
+        // 创建并且打开文件，准备写入
+        if ([fileManager createFileAtPath:self.currentFileString contents:nil attributes:nil] == YES) {
+            cmdString = [NSString stringWithFormat:@"150 Opening BINARY mode data connection for '%@'.", fileNameString];
+        } else {
+            cmdString = [NSString stringWithFormat:@"553 %@: Permission denied.", fileNameString];
+        }
+    } else {
+        // 不能创建文件
+        cmdString = [NSString stringWithFormat:@"553 %@: Permission denied.", fileNameString];
+    }
+    
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FC:doStor  %@", self.currentFileString);
+    }
+    
+    [sender sendMessage:cmdString];
+    
+    if (self.dataConnection) {
+        if (g_XMFTP_LogEnabled) {
+            XMFTPLog(@"FC:setting connection state to clientSending");
+        }
+        self.dataConnection.connectionState = YZZYFTPConnectionStateClientSending;
+    } else {
+        if (g_XMFTP_LogEnabled) {
+            XMFTPLog(@"FC:Erorr  Cant set connection state to Client Sending : no Connection yet ");
+        }
+    }
+}
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
     NSString *fileNameString = @"";
@@ -618,7 +654,7 @@
     }
     
     NSString *testDirectoryString = [fileManager currentDirectoryPath]; // 获取新目录
-    if (![fileManager changeCurrentDirectoryPath:currentDirectory]) {
+    if (![fileManager changeCurrentDirectoryPath:currentDirectoryString]) {
         return false; // Not a valid directory, shouldnt happen, but could u know
     }
     self.currentDirString = testDirectoryString;
@@ -632,6 +668,26 @@
         return true;
     }
 }
+
+- (NSString *)makeFilePathFrom:(NSString *)fileName {
+    if ([fileName characterAtIndex:0] == '/') {
+        // 绝对路径
+        if (self.server.changeRoot) {
+            // 相对baseDir的相对路径
+            return [[self.server.baseDirString stringByAppendingPathComponent:fileName] stringByResolvingSymlinksInPath];
+        } else {
+            return fileName;
+        }
+    } else {
+        return [self.currentDirString stringByAppendingPathComponent:fileName];
+    }
+}
+
+- (Boolean)validNewFilePath:(NSString*)filePath {
+    return true;
+}
+
+
 #pragma mark -
 #pragma mark - getters and setters
 
