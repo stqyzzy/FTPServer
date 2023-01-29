@@ -471,7 +471,7 @@
 
 // 进入被动模式
 - (void)doPasv:(id)sender arguments:(NSArray *)arguments {
-    [sender setTransferMode:pasvftp];
+    [sender setTransferMode:YZZYFTPTransferModePASVFTP];
     [sender openDataSocket:0];
 }
 #pragma mark UTILITIES
