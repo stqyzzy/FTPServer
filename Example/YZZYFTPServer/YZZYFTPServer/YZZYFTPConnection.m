@@ -392,6 +392,74 @@
     [sender sendMessage:@"211 End"];
 }
 
+// 返回工作目录的信息--如果指定了文件或目录，返回其信息；否则返回当前工作目录的信息
+- (void)doList:(id)sender arguments:(NSArray *)arguments {
+    // 获取要求我们列出的任何其他目录的名称，如果是空，就是当前目录
+    NSString *lsDirString = [self fileNameFromArgs:arguments]; // 获取我们请求的目录
+    NSString *listTextString;
+    if (lsDirString.length < 1) {
+        lsDirString = self.currentDirString;
+    } else {
+        lsDirString = [self rootedPath:lsDirString];
+    }
+    
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"doList currentDir(%@) changeRoot%d", lsDirString, self.server.changeRoot);
+        XMFTPLog(@"Will list %@ ", lsDirString);
+    }
+    
+    listTextString = [self.server createList:lsDirString];
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog( @"doList sending this. %@", listTextString);
+    }
+    [sender sendMessage:@"150 Opening ASCII mode data connection for '/bin/ls'."];
+    
+    [sender sendDataString:listTextString];
+}
+
+#pragma mark UTILITIES
+- (NSString *)fileNameFromArgs:(NSArray *)arguments {
+    NSString *fileNameString = @"";
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"%@", [arguments description]);
+    }
+    if (arguments.count > 1) {
+        for (int i = 1; i < arguments.count; i++) {
+            // 测试参数是否以"-"开头，如果以“-”开头，就可能是参数而不是名字
+            if ([[[arguments objectAtIndex:i] substringToIndex:1] isEqualToString:@"-"]) {
+                if (fileNameString.length == 0) {
+                    fileNameString = [arguments objectAtIndex:i];
+                } else {
+                    fileNameString = [NSString stringWithFormat:@"%@ %@", fileNameString, [arguments objectAtIndex:i]];
+                }
+            } else {
+                if (g_XMFTP_LogEnabled) {
+                    XMFTPLog(@"HYPHEN FOUND IGNORE");
+                }
+            }
+        }
+    }
+    return fileNameString;
+}
+
+- (NSString *)rootedPath:(NSString *)path {
+    NSString *expandedPathString;
+    // 获取新目录的全路径
+    if ([path characterAtIndex:0] == '/') {
+        // 如果是绝对路径
+        if (self.server.changeRoot) {
+            // 如果rooted了，这是一个相对路径，因此加上基础路径
+            expandedPathString = [[self.server.baseDirString stringByAppendingPathComponent:path] stringByResolvingSymlinksInPath];
+        } else {
+            expandedPathString = path; // 使用绝对路径
+        }
+    } else {
+        // 由于是相对路径，则拼接当前目录，成为绝对路径
+        expandedPathString = [[self.currentDirString stringByAppendingPathComponent:path] stringByResolvingSymlinksInPath];
+    }
+    expandedPathString = [expandedPathString stringByStandardizingPath];
+    return expandedPathString;
+}
 #pragma mark -
 #pragma mark - getters and setters
 
