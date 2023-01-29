@@ -532,6 +532,13 @@
         XMFTPLog(@"currentDir is now %@", self.currentDirString);
     }
 }
+
+// 返回指定目录的文件名列表
+- (void)doNlst:(id)sender arguments:(NSArray *)arguments {
+    [self doList:sender arguments:arguments];
+}
+
+
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
     NSString *fileNameString = @"";
