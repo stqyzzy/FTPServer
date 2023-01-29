@@ -633,7 +633,18 @@
     [sender sendMessage:cmdString];
 }
 
-
+// 提供命令行指定的对象的数据
+- (void)doMlst:(id)sender arguments:(NSArray *)arguments {
+    NSString *filenameString = [self fileNameFromArgs:arguments];
+    NSString *cmdString = [ NSString stringWithFormat:@"150 Opening BINARY mode data connection for '%@'.", filenameString];
+    // tell connection to expect a file
+    
+    /*  typiccal output to generate
+     250: MLST 2012.pdf
+     Type=file;Size=2420017;Modify=20080808074805;Perm=adfrw;Unique=AgAADpIHZwA; /Users/monsta/Documents/2012.pdf
+     End
+     */
+}
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
     NSString *fileNameString = @"";
