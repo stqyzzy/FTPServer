@@ -510,6 +510,28 @@
     NSString *cmdString = [NSString stringWithFormat:@"200 Type set to  %@.", cmd];
     [sender sendMessage:cmdString];
 }
+
+// 改变工作目录
+- (void)doCwd:(id)sender arguments:(NSArray *)arguments {
+    //    250
+    //    500, 501, 502, 421, 530, 550
+    //    250 CWD command successful.
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"DoCwd arguments is %@",arguments);
+    }
+    NSString *cmdString;
+    NSString *cwdDirString = [self fileNameFromArgs:arguments]; // 获取我们请求的目录
+    if ([self changeCurrentDirectoryTo:cwdDirString]) {
+        cmdString = [NSString stringWithFormat:@"250 OK. Current directory is %@", [self visibleCurrentDir]]; // 当前目录已经在新位置了
+        cmdString = @"250 CWD command successful.";
+    } else {
+        cmdString = @"550 CWD failed.";
+    }
+    [sender sendMessage:cmdString];
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"currentDir is now %@", self.currentDirString);
+    }
+}
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
     NSString *fileNameString = @"";
@@ -570,6 +592,37 @@
     } else {
         // 返回完整路径
         return self.currentDirString;
+    }
+}
+
+- (Boolean)changeCurrentDirectoryTo:(NSString *)newDirectory {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *currentDirectoryString = [fileManager currentDirectoryPath]; // 保存当前的目录
+    
+    NSString *expandedPathString = [self rootedPath:newDirectory];
+    if (![self canChangeDirectoryTo:expandedPathString]) {
+        // 测试我们能否使用这个目录
+        return false;
+    }
+    
+    // 切换到新目录并且获取系统文件路径
+    if (![fileManager changeCurrentDirectoryPath:expandedPathString]) {
+        return false;
+    }
+    
+    NSString *testDirectoryString = [fileManager currentDirectoryPath]; // 获取新目录
+    if (![fileManager changeCurrentDirectoryPath:currentDirectory]) {
+        return false; // Not a valid directory, shouldnt happen, but could u know
+    }
+    self.currentDirString = testDirectoryString;
+    return true;
+}
+
+- (Boolean)canChangeDirectoryTo:(NSString *)testDirectory {
+    if (self.server.changeRoot && (![testDirectory hasPrefix:self.server.baseDirString])) {
+        return false;
+    } else {
+        return true;
     }
 }
 #pragma mark -
