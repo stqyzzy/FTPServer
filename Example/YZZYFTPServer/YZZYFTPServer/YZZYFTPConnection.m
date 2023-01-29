@@ -503,6 +503,13 @@
     NSString *cmdstr = [NSString stringWithFormat:@"502 Unknown command '%@'",cmd];
     [sender sendMessage:cmdstr];
 }
+
+// 设定传输模式（ASCII/二进制).
+- (void)doType:(id)sender arguments:(NSArray *)arguments {
+    NSString *cmd = [arguments objectAtIndex:1];
+    NSString *cmdString = [NSString stringWithFormat:@"200 Type set to  %@.", cmd];
+    [sender sendMessage:cmdString];
+}
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
     NSString *fileNameString = @"";
