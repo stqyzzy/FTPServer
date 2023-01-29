@@ -576,7 +576,7 @@
     }
 }
 
-// 传输文件副本
+// 传输文件副本到客户端
 - (void)doRetr:(id)sender arguments:(NSArray *)arguments {
     // 下载到客户端
     BOOL isDir;
@@ -608,6 +608,32 @@
         [sender sendMessage:cmdString];
     }
 }
+
+// 删除文件
+- (void)doDele:(id)sender arguments:(NSArray *)arguments {
+    NSString *cmdString;
+    NSError *error;
+    NSString *fileNameString = [self fileNameFromArgs:arguments];
+    NSString *filePathString = [self makeFilePathFrom:fileNameString];
+    
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"filename is %@",fileNameString);
+    }
+    
+    if ([self accessibleFilePath:filePathString]) {
+        if ([[NSFileManager defaultManager] removeItemAtPath:filePathString error:&error]) {
+            cmdString = [NSString stringWithFormat:@"250 DELE command successful.", fileNameString];
+            [self.server didReceiveFileListChanged];
+        } else {
+            cmdString = [ NSString stringWithFormat:@"550 DELE command unsuccessful.", fileNameString];
+        }
+    } else {
+        cmdString = [NSString stringWithFormat:@"550 %@ No such file or directory.", fileNameString];
+    }
+    [sender sendMessage:cmdString];
+}
+
+
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
     NSString *fileNameString = @"";
