@@ -436,6 +436,22 @@
     [sender sendMessage:@"215 UNIX Type: L8 Version: iosFtp 20080912"];
 }
 
+// 为服务器指定要连接的长地址和端口
+- (void)doLprt:(id)sender arguments:(NSArray *)arguments {
+    // LPRT,"6,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,231,92"
+    NSString *socketDescString = [arguments objectAtIndex:1];
+    NSArray *socketAddrString = [socketDescString componentsSeparatedByString:@","];
+    int hb = [[socketAddrString objectAtIndex:19] intValue];
+    int lb = [[socketAddrString objectAtIndex:20] intValue];
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"%d %d %d", hb<<8, hb, lb);
+    }
+    int clientPort = (hb << 8) + lb;
+    [sender setTransferMode:YZZYFTPTransferModeLPRTFTP];
+    [sender openDataSocket:clientPort];
+}
+
+
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
     NSString *fileNameString = @"";
