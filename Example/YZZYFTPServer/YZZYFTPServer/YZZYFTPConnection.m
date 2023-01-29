@@ -373,6 +373,15 @@
     }
     [sender sendMessage:outputString];
 }
+
+// 返回当前的状态
+- (void)doStat:(id)sender arguments:(NSArray *)arguments {
+    // 发送状态消息
+    [sender sendMessage:@"211-localhost FTP server status:"];
+    // FIXME - add in the stats
+    [sender sendMessage:@"211 End of Status"];
+
+}
 #pragma mark -
 #pragma mark - getters and setters
 
