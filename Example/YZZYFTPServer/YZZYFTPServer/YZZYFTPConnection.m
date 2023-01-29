@@ -431,6 +431,11 @@
     [sender sendMessage:@"200 NOOP command successful."];
 }
 
+// 返回系统类型
+- (void)doSyst:(id)sender arguments:(NSArray*)arguments {
+    [sender sendMessage:@"215 UNIX Type: L8 Version: iosFtp 20080912"];
+}
+
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
     NSString *fileNameString = @"";
