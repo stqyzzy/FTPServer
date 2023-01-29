@@ -417,6 +417,16 @@
     [sender sendDataString:listTextString];
 }
 
+// 打印工作目录，返回主机的当前目录
+- (void)doPwd:(id)sender arguments:(NSArray *)arguments {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"Will PWD %@ ", [self visibleCurrentDir]);
+    }
+    NSString *cmdString = [NSString stringWithFormat:@"257 \"%@\" is the current directory.", [self visibleCurrentDir]];
+    [sender sendMessage:cmdString];
+}
+
+
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
     NSString *fileNameString = @"";
@@ -459,6 +469,25 @@
     }
     expandedPathString = [expandedPathString stringByStandardizingPath];
     return expandedPathString;
+}
+
+- (NSString *)visibleCurrentDir {
+    if (self.server.changeRoot) {
+        // 如果是root了
+        NSUInteger alength = self.server.baseDirString.length;
+        if (g_XMFTP_LogEnabled) {
+            XMFTPLog(@"Length is %lu", alength);
+        }
+        NSString *aString = [self.currentDirString substringFromIndex:alength]; // 获取基础路径后一位开始获取子串（一个bit）
+        if (![aString hasSuffix:@"/"]) {
+            aString = [aString stringByAppendingString:@"/"];
+        }
+        // 返回一个基础地址前缀移除厚的路径，只返回路径的最后部分，不包括基础路径
+        return aString;
+    } else {
+        // 返回完整路径
+        return self.currentDirString;
+    }
 }
 #pragma mark -
 #pragma mark - getters and setters

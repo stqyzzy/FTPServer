@@ -86,7 +86,7 @@ BOOL g_XMFTP_LogEnabled = NO;
         } else {
             self.baseDirString = aDirectory;
         }
-        self.changeRoot = NO;
+        self.changeRoot = NO; // 如果您希望将它们沙盒化/根植到基础目录中 则为true
         // 默认编码是 UTF8
         self.clientEncoding = NSUTF8StringEncoding;
     }
