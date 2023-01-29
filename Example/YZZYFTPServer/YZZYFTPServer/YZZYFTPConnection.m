@@ -426,6 +426,10 @@
     [sender sendMessage:cmdString];
 }
 
+// 无操作（哑包；通常用来保活）
+- (void)doNoop:(id)sender arguments:(NSArray*)arguments {
+    [sender sendMessage:@"200 NOOP command successful."];
+}
 
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
