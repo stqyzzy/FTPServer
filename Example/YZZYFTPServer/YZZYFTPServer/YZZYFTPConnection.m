@@ -380,8 +380,18 @@
     [sender sendMessage:@"211-localhost FTP server status:"];
     // FIXME - add in the stats
     [sender sendMessage:@"211 End of Status"];
-
 }
+
+// 获得服务器支持的特性列表
+- (void)doFeat:(id)sender arguments:(NSArray*)arguments {
+    [sender sendMessage:@"211-Features supported"];
+    // If encoding is UTF8, notify the client
+    if (self.server.clientEncoding == NSUTF8StringEncoding) {
+        [sender sendMessage:@" UTF8"];
+    }
+    [sender sendMessage:@"211 End"];
+}
+
 #pragma mark -
 #pragma mark - getters and setters
 
