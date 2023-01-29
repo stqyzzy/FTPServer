@@ -575,6 +575,39 @@
         }
     }
 }
+
+// 传输文件副本
+- (void)doRetr:(id)sender arguments:(NSArray *)arguments {
+    // 下载到客户端
+    BOOL isDir;
+    NSString *cmdString;
+    NSString *fileNameString = [self fileNameFromArgs:arguments];
+    NSString *filePathString = [self makeFilePathFrom:fileNameString]; // 将相对路径或绝对路径转换成我们需要的格式
+    
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"FC:doRetr: %@", filePathString);
+    }
+    
+    if ([self accessibleFilePath:filePathString]) {
+        // 判断这个文件路径是否在root区域，并且它是一个真实的文件
+        if ([[NSFileManager defaultManager] fileExistsAtPath:filePathString isDirectory:&isDir]) {
+            if (isDir) {
+                [sender sendMessage:[NSString stringWithFormat:@"550 %@: Not a plain file.", fileNameString]];
+            } else {
+                NSMutableData *fileData = [NSMutableData dataWithContentsOfFile:filePathString];
+                cmdString = [NSString stringWithFormat:@"150 Opening BINARY mode data connection for '%@'.", fileNameString];
+                [sender sendMessage:cmdString];
+                [sender sendData:fileData];
+            }
+        }
+    } else {
+        cmdString = [NSString stringWithFormat:@"50 %@ No such file or directory.", fileNameString];
+        if (g_XMFTP_LogEnabled) {
+            XMFTPLog(@"FC:doRetr: file %@ doesnt' exist ", filePathString);
+        }
+        [sender sendMessage:cmdString];
+    }
+}
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
     NSString *fileNameString = @"";
@@ -685,6 +718,10 @@
 
 - (Boolean)validNewFilePath:(NSString*)filePath {
     return true;
+}
+
+- (Boolean)accessibleFilePath:(NSString*)filePath {
+    return [[NSFileManager defaultManager] fileExistsAtPath:filePath];
 }
 
 
