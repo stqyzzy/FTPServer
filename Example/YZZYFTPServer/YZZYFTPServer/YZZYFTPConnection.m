@@ -469,6 +469,11 @@
     [sender openDataSocket:clientPort];
 }
 
+// 进入被动模式
+- (void)doPasv:(id)sender arguments:(NSArray *)arguments {
+    [sender setTransferMode:pasvftp];
+    [sender openDataSocket:0];
+}
 #pragma mark UTILITIES
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
     NSString *fileNameString = @"";
