@@ -665,6 +665,29 @@
     // 通知连接准备接收一个文件
     [sender sendMessage:cmdString];
 }
+
+// 创建目录
+- (void)doMkdir:(id)sender arguments:(NSArray *)arguments {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"current dir is %@", self.currentDirString);
+    }
+    
+    NSString *cmdString;
+    // 获取文件路径
+    NSString *pathString = [self makeFilePathFrom:[self fileNameFromArgs:arguments]];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([self validNewFilePath:pathString]) {
+        if ([fileManager fileExistsAtPath:pathString isDirectory:nil]) {
+            // 文件路径存在
+            cmdString = [NSString stringWithFormat:@"Error %@ exists", [self fileNameFromArgs:arguments]];
+        } else {
+            // 路径不存在
+            [fileManager createDirectoryAtPath:pathString withIntermediateDirectories:YES attributes:nil error:nil];
+            cmdString = [NSString stringWithFormat:@"250 MKD command successful."];
+        }
+    }
+    [sender sendMessage:cmdString];
+}
 #pragma mark UTILITIES
 // 根据连接传递过来的参数获取文件名
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
