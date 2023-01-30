@@ -645,7 +645,28 @@
      End
      */
 }
+
+// 返回文件大小
+- (void)doSize:(id)sender arguments:(NSArray *)arguments {
+    NSString *cmdString;
+    NSString *fileNameString = [self fileNameFromArgs:arguments];
+    NSString *filePathSting = [self makeFilePathFrom:fileNameString];
+    if ([self accessibleFilePath:filePathSting]) {
+        if ([self fileSize:filePathSting] < 10240) {
+            // qu 无符号64位整数
+            cmdString = [NSString stringWithFormat:@"213 %qu", [self fileSize:filePathSting]];
+        } else {
+            cmdString = [NSString stringWithFormat:@"550 %@ file too large for SIZE.", fileNameString];
+        }
+    } else {
+        // 没有找到文件
+        cmdString = [NSString stringWithFormat:@"550 %@ No such file or directory.", fileNameString];
+    }
+    // 通知连接准备接收一个文件
+    [sender sendMessage:cmdString];
+}
 #pragma mark UTILITIES
+// 根据连接传递过来的参数获取文件名
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
     NSString *fileNameString = @"";
     if (g_XMFTP_LogEnabled) {
@@ -739,6 +760,7 @@
     }
 }
 
+// 根据文件名获取文件路径
 - (NSString *)makeFilePathFrom:(NSString *)fileName {
     if ([fileName characterAtIndex:0] == '/') {
         // 绝对路径
@@ -761,7 +783,16 @@
     return [[NSFileManager defaultManager] fileExistsAtPath:filePath];
 }
 
-
+// 获取文件大小
+- (unsigned long long)fileSize:(NSString *)filePath {
+    NSError *error;
+    NSDictionary *fileAttribsDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:&error];
+    NSNumber *fileSize = [fileAttribsDictionary valueForKey:NSFileSize];
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"File size is %qu ", [fileSize unsignedLongLongValue]);
+    }
+    return [ fileSize unsignedLongLongValue];
+}
 #pragma mark -
 #pragma mark - getters and setters
 
