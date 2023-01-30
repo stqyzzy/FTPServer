@@ -703,6 +703,18 @@
         [sender sendMessage:@"550 CDUP command failed."];
     }
 }
+
+// 从...重命名
+- (void)doRnfr:(id)sender arguments:(NSArray *)arguments {
+    self.rnfrFilenameString = [self makeFilePathFrom:[self fileNameFromArgs:arguments]];
+    if ([self accessibleFilePath:self.rnfrFilenameString]) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:self.rnfrFilenameString]) {
+            [sender sendMessage:@"350 RNFR command successful."];
+        } else {
+            [sender sendMessage:@"550 RNFR command failed."];
+        }
+    }
+}
 #pragma mark UTILITIES
 // 根据连接传递过来的参数获取文件名
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
