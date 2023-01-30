@@ -688,6 +688,21 @@
     }
     [sender sendMessage:cmdString];
 }
+
+// 切换到父目录
+- (void)doCdUp:(id)sender arguments:(NSArray *)arguments {
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"CurrentDir is %@", [self visibleCurrentDir]);
+    }
+    // 上层目录
+    NSString *upDirString = [[self visibleCurrentDir] stringByDeletingLastPathComponent];
+    if ([self changeCurrentDirectoryTo:upDirString]) {
+        // 切换到了上级目录
+        [sender sendMessage:@"250 CDUP command successful."];
+    } else {
+        [sender sendMessage:@"550 CDUP command failed."];
+    }
+}
 #pragma mark UTILITIES
 // 根据连接传递过来的参数获取文件名
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
