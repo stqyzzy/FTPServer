@@ -622,10 +622,10 @@
     
     if ([self accessibleFilePath:filePathString]) {
         if ([[NSFileManager defaultManager] removeItemAtPath:filePathString error:&error]) {
-            cmdString = [NSString stringWithFormat:@"250 DELE command successful.", fileNameString];
+            cmdString = [NSString stringWithFormat:@"250 DELE command successful, %@.", fileNameString];
             [self.server didReceiveFileListChanged];
         } else {
-            cmdString = [ NSString stringWithFormat:@"550 DELE command unsuccessful.", fileNameString];
+            cmdString = [ NSString stringWithFormat:@"550 DELE command unsuccessful, %@.", fileNameString];
         }
     } else {
         cmdString = [NSString stringWithFormat:@"550 %@ No such file or directory.", fileNameString];
@@ -636,7 +636,7 @@
 // 提供命令行指定的对象的数据
 - (void)doMlst:(id)sender arguments:(NSArray *)arguments {
     NSString *filenameString = [self fileNameFromArgs:arguments];
-    NSString *cmdString = [ NSString stringWithFormat:@"150 Opening BINARY mode data connection for '%@'.", filenameString];
+    NSString *cmdString = [NSString stringWithFormat:@"150 Opening BINARY mode data connection for '%@'.", filenameString];
     // tell connection to expect a file
     
     /*  typiccal output to generate
