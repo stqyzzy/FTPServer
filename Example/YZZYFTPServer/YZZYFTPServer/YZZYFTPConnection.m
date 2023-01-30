@@ -715,6 +715,35 @@
         }
     }
 }
+
+// 重命名到...
+- (void)doRnto:(id)sender arguments:(NSArray *)arguments {
+    if (self.rnfrFilenameString == nil) {
+        [sender sendMessage:@"550 RNTO command failed."];
+        return;
+    }
+    NSError *error;
+    NSString *rntoFileNameString = [self makeFilePathFrom:[self fileNameFromArgs:arguments]];
+    
+    if (g_XMFTP_LogEnabled) {
+        XMFTPLog(@"%@", self.rnfrFilenameString);
+    }
+    
+    if ([self validNewFilePath:rntoFileNameString]) {
+        if ([[NSFileManager defaultManager] moveItemAtPath:self.rnfrFilenameString toPath:rntoFileNameString error:&error]) {
+            [self.server didReceiveFileListChanged];
+            [sender sendMessage:@"250 RNTO command successful."];
+        } else {
+            NSString *errorString = [error localizedDescription];
+            if (g_XMFTP_LogEnabled) {
+                XMFTPLog( @"RNTO failed %@", errorString);
+            }
+            [sender sendMessage:@"550 RNTO command failed."];
+        }
+    } else {
+        [sender sendMessage:@"550 RNTO command failed."];
+    }
+}
 #pragma mark UTILITIES
 // 根据连接传递过来的参数获取文件名
 - (NSString *)fileNameFromArgs:(NSArray *)arguments {
