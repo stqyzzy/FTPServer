@@ -503,6 +503,7 @@
     NSString *cmd = [arguments objectAtIndex:1];
     NSString *cmdstr = [NSString stringWithFormat:@"502 Unknown command '%@'",cmd];
     [sender sendMessage:cmdstr];
+//    [sender sendMessage:@"200 OPTS UTF8 command successful - UTF8 encoding now ON"];
 }
 
 // 设定传输模式（ASCII/二进制).

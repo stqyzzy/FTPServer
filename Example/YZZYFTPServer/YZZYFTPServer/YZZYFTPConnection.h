@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) YZZYFTPServer *server; // FTPSever
 @property (nonatomic, strong) AsyncSocket *dataListeningSocket; // Socket监听数据链接，这个暂时用不上
 @property (nonatomic, assign) UInt16 dataPort; // 数据端口
-@property (nonatomic, copy) NSMutableArray *queuedDataMutableArray; // 用于在连接尚未完全启动时发送数据的缓冲区
+@property (nonatomic, strong) NSMutableArray *queuedDataMutableArray; // 用于在连接尚未完全启动时发送数据的缓冲区
 @property (nonatomic, strong) NSFileHandle *currentFileHandle; // 保存文件的句柄
 @property (nonatomic, copy) NSString *currentUserString; // 当前连接的用户
 @property (nonatomic, strong) AsyncSocket *dataSocket; // 复制侦听套接字 - 工作时从代码中删除侦听套接字 - 似乎是这种情况。
