@@ -755,7 +755,7 @@
     if (arguments.count > 1) {
         for (int i = 1; i < arguments.count; i++) {
             // 测试参数是否以"-"开头，如果以“-”开头，就可能是参数而不是名字
-            if ([[[arguments objectAtIndex:i] substringToIndex:1] isEqualToString:@"-"]) {
+            if (![[[arguments objectAtIndex:i] substringToIndex:1] isEqualToString:@"-"]) {
                 if (fileNameString.length == 0) {
                     fileNameString = [arguments objectAtIndex:i];
                 } else {
