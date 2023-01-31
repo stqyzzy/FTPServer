@@ -554,7 +554,7 @@
 				GCC_PREFIX_HEADER = "YZZYFTPServer/YZZYFTPServer-Prefix.pch";
 				INFOPLIST_FILE = "YZZYFTPServer/YZZYFTPServer-Info.plist";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = yzzy.com.devcxm.XMFTPServerDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = yzzy.com.devcxm.YZZYTPServerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;
@@ -571,7 +571,7 @@
 				GCC_PREFIX_HEADER = "YZZYFTPServer/YZZYFTPServer-Prefix.pch";
 				INFOPLIST_FILE = "YZZYFTPServer/YZZYFTPServer-Info.plist";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = yzzy.com.devcxm.XMFTPServerDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = yzzy.com.devcxm.YZZYTPServerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;

@@ -348,17 +348,18 @@
 - (void)doUser:(id)sender arguments:(NSArray *)arguments {
     // 发出确认信息--331 password required for
     if (self.currentUserString != nil) {
-        self.currentUserString = [arguments objectAtIndex:1];// 传递过来的用户名
-        NSString *outputString = @"";
-        NSString *localUserNameString = @""; // 本地设置的用户名
-        if ([self.currentUserString isEqualToString:localUserNameString]) {
-            outputString = [ NSString stringWithFormat:@"331 Password required for %@", self.currentUserString];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"currentUserLogin" object:nil]; // 发送登录通知
-        } else {
-            outputString = @"530 Invalid username\n"; // 无效信息
-        }
-        [sender sendMessage:outputString];
+        self.currentUserString = @"";
     }
+    self.currentUserString = [arguments objectAtIndex:1];// 传递过来的用户名
+    NSString *outputString = @"";
+    NSString *localUserNameString = @"stq"; // 本地设置的用户名
+    if ([self.currentUserString isEqualToString:localUserNameString]) {
+        outputString = [NSString stringWithFormat:@"331 Password required for %@", self.currentUserString];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"currentUserLogin" object:nil]; // 发送登录通知
+    } else {
+        outputString = @"530 Invalid username\n"; // 无效信息
+    }
+    [sender sendMessage:outputString];
 }
 
 // 密码认证
