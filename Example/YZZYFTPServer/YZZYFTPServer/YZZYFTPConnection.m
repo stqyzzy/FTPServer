@@ -551,6 +551,7 @@
     if ([self validNewFilePath:self.currentFileString]) {
         // 创建并且打开文件，准备写入
         if ([fileManager createFileAtPath:self.currentFileString contents:nil attributes:nil] == YES) {
+            self.currentFileHandle = [NSFileHandle fileHandleForWritingAtPath:self.currentFileString];                // Open the file handle to write to
             cmdString = [NSString stringWithFormat:@"150 Opening BINARY mode data connection for '%@'.", fileNameString];
         } else {
             cmdString = [NSString stringWithFormat:@"553 %@: Permission denied.", fileNameString];
