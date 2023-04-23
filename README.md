@@ -22,7 +22,6 @@ pod 'YZZYFTPServer'
 
 ## Author
 
-stqyzzy, shengtianqi@100tal.com
 
 ## License
 
